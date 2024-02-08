@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum RefundType {
+  POINT
+  BANK
+}
+
+enum OrderStatus {
+  UNPAID
+  PREPARED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Search {
+  id            Int           @id @default(autoincrement())
+  name          String
+  count         Int?
+  user_searches User_Search[]
+}
+
+model User_Search {
+  id       Int    @id @default(autoincrement())
+  user     Users  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId   Int    @map("user_id")
+  search   Search @relation(fields: [searchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  searchId Int    @map("search_id")
+}
+
+model ShippingAddresses {
+  id            Int     @id @default(autoincrement())
+  firstName     String  @map("first_name")
+  lastName      String  @map("last_name")
+  phone         String
+  email         String?
+  address       String
+  postalCode    String  @map("postal_code")
+  province      String
+  district      String
+  subDistrict   String? @map("sub_district")
+  isMainAddress Boolean @map("is_main_address")
+  user          Users   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId        Int     @map("user_id")
+
+  @@map("shipping_address")
+}
+
+model Users {
+  id                Int                 @id @default(autoincrement())
+  role              Role                @default(USER)
+  firstName         String?             @map("first_name")
+  lastName          String?             @map("last_name")
+  username          String              @unique
+  email             String?
+  password          String
+  phone             String?
+  identityNumber    String?             @map("identity_number")
+  refund            RefundType?
+  point             Int                 @default(0)
+  shippingAddresses ShippingAddresses[]
+  user_searches     User_Search[]
+  favorites         Favorites[]
+  carts             Cart?
+  orders            Orders[]
+  products          Products[]
+}
+
+model Favorites {
+  id                Int                @id @default(autoincrement())
+  name              String
+  user              Users              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId            Int                @map("user_id")
+  favorite_products Favorite_Product[]
+}
+
+model Favorite_Product {
+  id         Int       @id @default(autoincrement())
+  favorite   Favorites @relation(fields: [favoriteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  favoriteId Int       @map("favorite_id")
+  product    Products  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId  Int       @map("product_id")
+}
+
+model Cart {
+  id                  Int            @id @default(autoincrement())
+  totalBeforeDiscount Int            @default(0) @map("total_before_discount")
+  discount            Int            @default(0)
+  deliveryFee         Int            @default(0) @map("delivery_fee")
+  total               Int            @default(0)
+  user                Users          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId              Int            @unique @map("user_id")
+  cart_products       Cart_Product[]
+}
+
+model Cart_Product {
+  id        Int      @id @default(autoincrement())
+  quantity  Int
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cartId    Int      @map("cart_id")
+  product   Products @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId Int      @map("product_id")
+}
+
+model Orders {
+  id                  Int             @id @default(autoincrement())
+  totalBeforeDiscount Int             @default(0) @map("total_before_discount")
+  discount            Int             @default(0)
+  deliveryFee         Int             @default(0) @map("delivery_fee")
+  total               Int             @default(0)
+  createdAt           DateTime        @default(now()) @map("created_at")
+  user                Users           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId              Int             @map("user_id")
+  order_products      Order_Product[]
+}
+
+model Status {
+  id        Int         @id @default(autoincrement())
+  status    OrderStatus @default(UNPAID)
+  createdAt DateTime    @default(now()) @map("created_at")
+}
+
+model Order_Product {
+  id        Int      @id @default(autoincrement())
+  quantity  Int
+  order     Orders   @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orderId   Int      @map("order_id")
+  product   Products @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId Int      @map("product_id")
+}
+
+model Products {
+  id                 Int                 @id @default(autoincrement())
+  name               String
+  stock              Int?
+  unit               Int?
+  price              Int
+  detail             String
+  user               Users               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId             Int                 @map("user_id")
+  category           Categories          @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId         Int                 @map("category_id")
+  brand              Brands              @relation(fields: [brandId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  brandId            Int                 @map("brand_id")
+  product_promotions Product_Promotion[]
+  product_imgs       Product_Img[]
+  favorite_products  Favorite_Product[]
+  cart_products      Cart_Product[]
+  order_products     Order_Product[]
+}
+
+model Product_Promotion {
+  id          Int        @id @default(autoincrement())
+  product     Products   @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId   Int        @map("product_id")
+  promotion   Promotions @relation(fields: [promotionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  promotionId Int        @map("promotion_id")
+}
+
+model Promotions {
+  id                 Int                 @id @default(autoincrement())
+  name               String
+  bannerUrl          String?             @map("banner_url")
+  discount           Int?
+  point              Int?
+  product_promotions Product_Promotion[]
+}
+
+model Product_Img {
+  id        Int      @id @default(autoincrement())
+  url       String?
+  product   Products @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId Int      @map("product_id")
+}
+
+model Categories {
+  id       Int        @id @default(autoincrement())
+  name     String
+  count    Int?
+  products Products[]
+}
+
+model Brands {
+  id       Int        @id @default(autoincrement())
+  name     String
+  count    Int?
+  products Products[]
+}
