@@ -16,9 +16,21 @@ exports.getUserByEmail = (email) => {
     });
 };
 
-exports.createUser = (email, password) => {
+exports.getUserByUsername = (username) => {
+    return prisma.users.findFirst({
+        where: {
+            username,
+        },
+    });
+}; 
+
+exports.createUser = (firstName, lastName, phone, email, username, password) => {
     return prisma.users.create({
         data: {
+            firstName,
+            lastName,
+            phone,
+            username,
             email,
             password,
         },

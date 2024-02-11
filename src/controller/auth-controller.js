@@ -16,7 +16,26 @@ exports.register = async (req, res, next) => {
     */
 
     try {
-        const { email, password } = req.body;
+        const { 
+            firstName, 
+            lastName,
+            phone,
+            email, 
+            username, 
+            password 
+        } = req.body;
+
+        if(typeof firstName !== 'string') {
+            createError(400, 'Type of first name must be string');
+        }
+
+        if(typeof lastName !== 'string') {
+            createError(400, 'Type of last name must be string');
+        }
+
+        if(typeof phone !== 'string') {
+            createError(400, 'Type of phone must be string');
+        }
 
         if(!email || !password) {
             return createError(400, 'Email and password required');
@@ -34,9 +53,9 @@ exports.register = async (req, res, next) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await userService.createUser(email, hashedPassword);
+        await userService.createUser(firstName, lastName, phone, email, username, hashedPassword);
 
-        res.json({ email, password });
+        res.json({ firstName, lastName, phone, email, username, hashedPassword });
 
     } catch (err) {
         next(err);
@@ -52,34 +71,35 @@ exports.login = async (req, res, next) => {
     - check password is match
     - send token
     */
+   
+   try {
+        const { username, password } = req.body;
 
-    try {
-        const { email, password } = req.body;
-
-        if(!email || !password) {
-            return createError(400, 'Email or password is invalid');
+        
+        if(!(username.trim() && password.trim())) {
+            return createError(400, 'Username or password is invalid');
         }
 
-        if(typeof email !== 'string' || typeof password !== 'string') {
-            return createError(400, 'Email or password is invalid');
+        if(typeof username !== 'string' || typeof password !== 'string') {
+            return createError(400, 'Username or password is invalid');
         }
 
-        const isUserExist = await userService.getUserByEmail(email);
+        const isUserExist = await userService.getUserByUsername(username);
 
         if(!isUserExist) {
-            return createError(400, 'Email or password is invalid');
+            return createError(400, 'Username or password is invalid');
         }
 
         const isPasswordMatch = await bcrypt.compare(password, isUserExist.password);
 
         if(!isPasswordMatch) {
-            return createError(400, 'Email or password is invalid');
+            return createError(400, 'Username or password is invalid');
         }
 
         const token = jwt.sign(
             { id: isUserExist.id }, 
             process.env.JWT_SECRET,
-            { expiresIn: process.env.JWT_EXPIRES_IN, },
+            { expiresIn: process.env.JWT_EXPIRES_IN },
             );
 
         res.json({ token });
@@ -88,6 +108,10 @@ exports.login = async (req, res, next) => {
         next(err);
     }
 
+};
+
+exports.getMe = (req, res, next) => {
+    res.json(req.user);
 };
 
 exports.forgetPassword = async (req, res, next) => {

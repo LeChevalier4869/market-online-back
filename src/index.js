@@ -21,5 +21,5 @@ app.use(errorHandler);
 app.use('*', notFoundHandler);
 
 app.listen(port, () => {
-    console.log(`Server is running on port 8000`);
+    console.log(`Server is running on port ${port}`);
 })
