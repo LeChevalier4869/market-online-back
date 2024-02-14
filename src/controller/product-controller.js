@@ -3,7 +3,13 @@ const createError = require('../utils/createError');
 
 exports.getProductsLanding = async (req, res, next) => {
     try {
-        const products = await prisma.products.findMany();
+        const products = await prisma.products.findMany({
+            include: {
+                brand: true,
+                category: true,
+                product_imgs: true,
+            },
+         });
         res.json({ products });
     } catch (err) {
         next(err);
@@ -34,6 +40,7 @@ exports.getProducts = async (req, res, next) => {
             include: {
                 brand: true,
                 category: true,
+                product_imgs: true,
             },
         });
         if(product.length === 0) {
@@ -63,6 +70,7 @@ exports.getProductById = async (req, res, next) => {
             },
             include: {
                 product_imgs: true,
+                 product_promotions: true,
             },
         });
 
