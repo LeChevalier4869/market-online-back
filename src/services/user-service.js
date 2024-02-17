@@ -24,9 +24,10 @@ exports.getUserByUsername = (username) => {
     });
 }; 
 
-exports.createUser = (firstName, lastName, phone, email, username, password) => {
+exports.createUser = (role, firstName, lastName, phone, email, username, password) => {
     return prisma.users.create({
         data: {
+            role, 
             firstName,
             lastName,
             phone,

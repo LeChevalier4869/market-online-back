@@ -13,5 +13,6 @@ router.patch('/product/:productId', adminController.updateProduct);
 router.post('/category', adminController.createCategory);
 router.post('/brand', adminController.createBrand);
 router.post('/promotion', adminController.createPromotion);
+router.get('/product/landing', adminController.productLanding);
 
 module.exports = router;

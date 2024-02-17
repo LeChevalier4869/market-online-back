@@ -144,3 +144,21 @@ exports.createPromotion = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.productLanding = async (req, res, next) => {
+    try {
+        const products = await prisma.products.findMany({
+            where: {
+                userId: req.user.id
+            },
+            include: {
+                brand: true,
+                category: true,
+                product_imgs: true,
+            },
+         });
+        res.json({ products });
+    } catch (err) {
+        next(err);
+    }
+};

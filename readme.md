@@ -45,6 +45,7 @@ params: -
 body: -
 
 -------------------------------------------------------------------
+
 ## Admin
 
 ### Create product by admin
@@ -85,13 +86,27 @@ body: { name }
 -------------------------------------------------------------------
 ### Create promotion by admin
 
+
 method: POST
 path: /admin/promotion
 authen: true
 params: -
 body: { name, bannerUrl, discount, point }
 
+
 -------------------------------------------------------------------
+### Show admin's product
+
+
+method: GET
+path: /admin/product/landing
+authen: true
+params: -
+body: -
+
+
+-------------------------------------------------------------------
+
 ## Product
 
 ### Show product landing
@@ -108,7 +123,7 @@ body: -
 method: GET
 path: /product?
 authen: false
-params: -
+params: categoryName (front-end)
 body: -
 query: { search, brand, category }
 
@@ -122,6 +137,7 @@ params: productId
 body: -
 
 -------------------------------------------------------------------
+
 ## Category
 
 ### Show category landing
@@ -142,6 +158,7 @@ params: categoryId
 body: - 
 
 --------------------------------------------------------------------
+
 ## Brand
 
 ### Show brand by id
@@ -153,6 +170,7 @@ params: brandId
 body: -
 
 -------------------------------------------------------------------------------
+
 ## Promotion
 
 ### Show promotion landing
