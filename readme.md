@@ -106,6 +106,17 @@ body: -
 
 
 -------------------------------------------------------------------
+### Delete admin's product
+
+
+method: DELETE
+path: /admin/product/
+authen: true
+params: productId
+body: -
+
+
+-------------------------------------------------------------------
 
 ## Product
 

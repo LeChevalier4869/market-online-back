@@ -69,8 +69,10 @@ exports.getProductById = async (req, res, next) => {
                 id: Number(productId),
             },
             include: {
+                category: true,
+                brand: true,
                 product_imgs: true,
-                 product_promotions: true,
+                product_promotions: true,
             },
         });
 

@@ -162,3 +162,30 @@ exports.productLanding = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.deleteProduct = async (req, res, next) => {
+    try {
+        const { productId } = req.params;
+
+        //validation
+
+        const id = await prisma.products.findFirst({
+            where: {
+                id: Number(productId),
+            },
+        });
+
+        if(id === null) {
+            return createError(400, 'Product not found');
+        }
+
+        const deleteProduct = await prisma.products.delete({
+            where: {
+                id: Number(productId),
+            },
+        });
+        res.json({ message: 'deleted', deleteProduct });
+    } catch (err) {
+        next(err);
+    }
+};

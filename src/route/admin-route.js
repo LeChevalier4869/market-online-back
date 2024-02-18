@@ -14,5 +14,6 @@ router.post('/category', adminController.createCategory);
 router.post('/brand', adminController.createBrand);
 router.post('/promotion', adminController.createPromotion);
 router.get('/product/landing', adminController.productLanding);
+router.delete('/product/:productId', adminController.deleteProduct);
 
 module.exports = router;
