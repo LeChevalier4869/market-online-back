@@ -202,3 +202,65 @@ params: promotionId
 body: -
 
 -------------------------------------------------------------------------------
+
+
+## Address
+
+### Show all address of user
+
+method: get
+path: /address/
+authen: true
+params: -
+body: -
+
+------------------------------------------------------------------------------
+### Show address by ID
+
+method: get
+path: /address/
+authen: true
+params: addressId
+body: -
+
+-------------------------------------------------------------------------------
+### Create new address
+
+method: post
+path: /address/new
+authen: true
+params: -
+body: { 
+        firstName,
+        lastName,
+        phone,
+        email,
+        address,
+        postalCode,
+        province,
+        district,
+        sub_district,
+        isMainAddress,
+        userId
+      }
+
+------------------------------------------------------------------------------
+### Update address
+
+method: patch
+path: /address/
+authen: true
+params: addressId
+body: -
+
+------------------------------------------------------------------------------
+### Delete address
+
+method: delete
+path: /address/
+authen: true
+params: addressId
+body: -
+
+------------------------------------------------------------------------------
+

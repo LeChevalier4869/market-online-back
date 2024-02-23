@@ -11,6 +11,7 @@ const productRoute = require('./route/product-route');
 const categoryRoute = require('./route/category-route');
 const brandRoute = require('./route/brand-route');
 const promotionRoute = require('./route/promotion-route');
+const addressRoute = require('./route/address-route');
 
 const authenticate = require('./middlewares/authenticate');
 const admin = require('./middlewares/admin');
@@ -26,6 +27,7 @@ app.use('/admin', authenticate, admin, adminRoute);
 app.use('/category', categoryRoute);
 app.use('/brand', brandRoute);
 app.use('/promotion', promotionRoute);
+app.use('/address', authenticate, addressRoute);
 
 app.use(errorHandler);
 app.use('*', notFoundHandler);
