@@ -17,7 +17,6 @@ exports.register = async (req, res, next) => {
 
     try {
         const { 
-            role,
             firstName, 
             lastName,
             phone,
@@ -26,9 +25,9 @@ exports.register = async (req, res, next) => {
             password 
         } = req.body;
 
-        if(!(role === 'ADMIN' || role === 'USER')) {
-            createError(400, "Role not found");
-        }
+        // if(!(role === 'ADMIN' || role === 'USER')) {
+        //     createError(400, "Role not found");
+        // }
 
         if(typeof firstName !== 'string') {
             createError(400, 'Type of first name must be string');
@@ -58,9 +57,9 @@ exports.register = async (req, res, next) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await userService.createUser(role, firstName, lastName, phone, email, username, hashedPassword);
+        await userService.createUser(firstName, lastName, phone, email, username, hashedPassword);
 
-        res.json({ role, firstName, lastName, phone, email, username, hashedPassword });
+        res.json({ firstName, lastName, phone, email, username, hashedPassword });
 
     } catch (err) {
         next(err);

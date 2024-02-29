@@ -264,3 +264,18 @@ body: -
 
 ------------------------------------------------------------------------------
 
+
+## Cart
+
+### Show cart by user(get token)
+
+method: get
+path: /cart/
+authen: true
+params: :userId
+body: -
+
+-------------------------------------------------------------------------------
+### Automatic create cart when register
+
+- Create cart include user

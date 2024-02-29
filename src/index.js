@@ -12,6 +12,7 @@ const categoryRoute = require('./route/category-route');
 const brandRoute = require('./route/brand-route');
 const promotionRoute = require('./route/promotion-route');
 const addressRoute = require('./route/address-route');
+const cartRoute = require('./route/cart-route');
 
 const authenticate = require('./middlewares/authenticate');
 const admin = require('./middlewares/admin');
@@ -28,6 +29,7 @@ app.use('/category', categoryRoute);
 app.use('/brand', brandRoute);
 app.use('/promotion', promotionRoute);
 app.use('/address', authenticate, addressRoute);
+app.use('/cart', authenticate, cartRoute);
 
 app.use(errorHandler);
 app.use('*', notFoundHandler);

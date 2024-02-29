@@ -1,5 +1,4 @@
 const express = require('express');
-const prisma = require('../config/prisma');
 const addressController = require('../controller/address-controller');
 const router = express.Router();
 
