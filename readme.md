@@ -272,10 +272,111 @@ body: -
 method: get
 path: /cart/
 authen: true
-params: :userId
+params: -
 body: -
 
 -------------------------------------------------------------------------------
 ### Automatic create cart when register
 
 - Create cart include user
+
+-------------------------------------------------------------------------------
+### Update cart
+
+method: patch
+path: /cart/
+authen: true
+params: -
+body: { totalBeforeDiscount, discount, deliveryFee, total }
+
+-------------------------------------------------------------------------------
+### Add product to cart (cart_product Table)
+
+method: post
+path: /cart/
+authen: true
+params: cartId, productId
+body: { quantity }
+
+-------------------------------------------------------------------------------
+### Show product in cart (cart_product Table)
+
+method: get
+path: /cart/
+authen: true
+params: cartId
+body: -
+
+------------------------------------------------------------------------------
+### Create cart for old user
+
+method: post
+path: /cart/
+authen: true
+params: userId
+body: -
+
+------------------------------------------------------------------------------
+### Delete product in cart (cart_product Table)
+
+method: delete
+path: /cart/
+authen: true
+params: cpId
+body: -
+
+------------------------------------------------------------------------------
+
+## Order
+
+### Show product of order landing (orders Table)
+
+method: get
+path: /order/
+authen: true
+params: -
+body: -
+
+------------------------------------------------------------------------------
+### Create order (orders Table)
+
+method: post
+path: /order/
+authen: true
+params: -
+body: {
+        totalBeforeDiscount,
+        discount,
+        deliveryFee,
+        total,
+        createdAt,
+      }
+
+-------------------------------------------------------------------------------
+### Add product to order (order_product Table)
+
+method: post
+path: /order/
+authen: true
+params: orderId, productId
+body: { quantity }
+
+-------------------------------------------------------------------------------
+### Update order (order_product Table)
+
+method: patch
+path: /order/
+authen: true
+params: opId
+body: { quantity }
+
+-------------------------------------------------------------------------------
+### Delete order (order_product Table)
+
+method: delete
+path: /order/
+authen: true
+params: opId
+body: -
+
+-------------------------------------------------------------------------------

@@ -110,7 +110,7 @@ model Cart {
 
 model Cart_Product {
   id        Int      @id @default(autoincrement())
-  quantity  Int
+  quantity  Int      @default(1)
   cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cartId    Int      @map("cart_id")
   product   Products @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -137,7 +137,7 @@ model Status {
 
 model Order_Product {
   id        Int      @id @default(autoincrement())
-  quantity  Int
+  quantity  Int      @default(1)
   order     Orders   @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   orderId   Int      @map("order_id")
   product   Products @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
